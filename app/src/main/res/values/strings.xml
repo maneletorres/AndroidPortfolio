@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Android Portfolio</string>
+    <string name="github_query_hint">Type a query for GitHub!</string>
+    <string name="github_query_text">Enter a search query and your URL will show up here!</string>
+    <string name="github_query_result_text">Make a search and your results will show up here!</string>
+    <string name="search">Search</string>
+</resources>
