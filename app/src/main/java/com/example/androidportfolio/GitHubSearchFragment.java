@@ -1,15 +1,13 @@
 package com.example.androidportfolio;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -48,14 +46,31 @@ public class GitHubSearchFragment extends Fragment {
 
     private void makeGithubSearchQuery() {
         String githubQuery = mSearchBoxEditText.getText().toString();
-        URL githubSearuchUrl = NetworkUtils.buildUrl(githubQuery);
-        mUrlDisplayTextView.setText(githubSearuchUrl.toString());
-        String githubSearchResults;
-        try {
-            githubSearchResults = NetworkUtils.getResponseFromHttpUrl(githubSearuchUrl);
-            mSearchResultsTextView.setText(githubSearchResults);
-        } catch (IOException e) {
-            e.printStackTrace();
+        URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
+        mUrlDisplayTextView.setText(githubSearchUrl.toString());
+        new GithubQuerySearch().execute(githubSearchUrl);
+    }
+
+    private class GithubQuerySearch extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            URL searchUrl = urls[0];
+            String githubSearchResults = null;
+            try {
+                githubSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            return githubSearchResults;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s != null && !s.equals("")) {
+                mSearchResultsTextView.setText(s);
+            }
         }
     }
 }
