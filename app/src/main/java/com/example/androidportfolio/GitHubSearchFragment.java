@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,9 +19,11 @@ import java.io.IOException;
 import java.net.URL;
 
 public class GitHubSearchFragment extends Fragment {
-    EditText mSearchBoxEditText;
-    TextView mUrlDisplayTextView;
-    TextView mSearchResultsTextView;
+    private EditText mSearchBoxEditText;
+    private TextView mUrlDisplayTextView;
+    private TextView mSearchResultsTextView;
+    private TextView mErrorMessageTextView;
+    private ProgressBar mLoadingIndicator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +34,8 @@ public class GitHubSearchFragment extends Fragment {
         mSearchBoxEditText = view.findViewById(R.id.et_search_box);
         mUrlDisplayTextView = view.findViewById(R.id.tv_url_display);
         mSearchResultsTextView = view.findViewById(R.id.tv_github_search_results_json);
+        mErrorMessageTextView = view.findViewById(R.id.tv_error_message_display);
+        mLoadingIndicator = view.findViewById(R.id.pb_loading_indicator);
 
         return view;
     }
@@ -51,7 +56,22 @@ public class GitHubSearchFragment extends Fragment {
         new GithubQuerySearch().execute(githubSearchUrl);
     }
 
+    private void showJsonDataView() {
+        mErrorMessageTextView.setVisibility(View.INVISIBLE);
+        mSearchResultsTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void showErrorMessage() {
+        mSearchResultsTextView.setVisibility(View.INVISIBLE);
+        mErrorMessageTextView.setVisibility(View.VISIBLE);
+    }
+
     private class GithubQuerySearch extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -68,8 +88,13 @@ public class GitHubSearchFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
+
             if (s != null && !s.equals("")) {
+                showJsonDataView();
                 mSearchResultsTextView.setText(s);
+            } else {
+                showErrorMessage();
             }
         }
     }
