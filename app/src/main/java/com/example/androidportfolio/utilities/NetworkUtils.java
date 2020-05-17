@@ -15,7 +15,9 @@ package com.example.androidportfolio.utilities;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,13 +43,39 @@ public class NetworkUtils {
     final static String PARAM_SORT = "sort";
     final static String sortBy = "stars";
 
+    final static String QUERY_PARAM = "q";
+    final static String LAT_PARAM = "lat";
+    final static String LON_PARAM = "lon";
+    final static String FORMAT_PARAM = "mode";
+
+    /*
+     * NOTE: These values only effect responses from OpenWeatherMap, NOT from the fake weather
+     * server. They are simply here to allow us to teach you how to build a URL if you were to use
+     * a real API.If you want to connect your app to OpenWeatherMap's API, feel free to! However,
+     * we are not going to show you how to do so in this course.
+     */
+    final static String UNITS_PARAM = "units";
+    final static String DAYS_PARAM = "cnt";
+    private static final String TAG = NetworkUtils.class.getSimpleName();
+    private static final String DYNAMIC_WEATHER_URL =
+            "https://andfun-weather.udacity.com/weather";
+    private static final String STATIC_WEATHER_URL =
+            "https://andfun-weather.udacity.com/staticweather";
+    private static final String FORECAST_BASE_URL = STATIC_WEATHER_URL;
+    /* The format we want our API to return */
+    private static final String format = "json";
+    /* The units we want our API to return */
+    private static final String units = "metric";
+    /* The number of days we want our API to return */
+    private static final int numDays = 14;
+
     /**
      * Builds the URL used to query GitHub.
      *
      * @param githubSearchQuery The keyword that will be queried for.
      * @return The URL to use to query the GitHub server.
      */
-    public static URL buildUrl(String githubSearchQuery) {
+    public static URL buildGithubUrl(String githubSearchQuery) {
         Uri uri = Uri.parse(GITHUB_BASE_URL).buildUpon().appendQueryParameter(PARAM_QUERY, githubSearchQuery).appendQueryParameter(PARAM_SORT, sortBy).build();
         URL url = null;
         try {
@@ -55,6 +83,33 @@ public class NetworkUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        return url;
+    }
+
+    /**
+     * Builds the URL used to talk to the weather server using a location. This location is based
+     * on the query capabilities of the weather provider that we are using.
+     *
+     * @param locationQuery The location that will be queried for.
+     * @return The URL to use to query the weather server.
+     */
+    public static URL buildSunshineUrl(String locationQuery) {
+        // TODO (1) Fix this method to return the URL used to query Open Weather Map's API
+        Uri uri = Uri.parse(FORECAST_BASE_URL).buildUpon()
+                .appendQueryParameter(QUERY_PARAM, locationQuery)
+                .appendQueryParameter(FORMAT_PARAM, format)
+                .appendQueryParameter(UNITS_PARAM, units)
+                .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
+                .build();
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        }
+
+        Log.v(TAG, "Built URI " + url);
 
         return url;
     }
