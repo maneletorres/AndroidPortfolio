@@ -51,7 +51,7 @@ public class GitHubSearchFragment extends Fragment {
 
     private void makeGithubSearchQuery() {
         String githubQuery = mSearchBoxEditText.getText().toString();
-        URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
+        URL githubSearchUrl = NetworkUtils.buildGithubUrl(githubQuery);
         mUrlDisplayTextView.setText(githubSearchUrl.toString());
         new GithubQuerySearch().execute(githubSearchUrl);
     }
