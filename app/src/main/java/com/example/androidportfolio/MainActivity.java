@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Favorite Toys"));
         tabLayout.addTab(tabLayout.newTab().setText("GitHub Search"));
+        tabLayout.addTab(tabLayout.newTab().setText("Sunshine"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mPager = findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -70,12 +71,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -103,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
                     return new FavoriteToysFragment();
                 case 1:
                     return new GitHubSearchFragment();
+                case 2:
+                    return new SunshineFragment();
                 default:
                     return null;
             }
