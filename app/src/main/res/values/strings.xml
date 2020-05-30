@@ -113,4 +113,17 @@
     <string name="condition_962">Hurricane</string>
 
     <string name="condition_unknown">Unknown (<xliff:g id="conditionId">%1$d</xliff:g>)</string>
+
+    <string name="action_refresh">Refresh</string>
+
+    <!-- Intents Practice fragment: -->
+    <string name="website_text">Enter a website:</string>
+    <string name="website_edit_text_content_description">Website EditText</string>
+    <string name="open_website_button">Open Website</string>
+    <string name="location_text">Enter a location:</string>
+    <string name="location_edit_text_content_description">Location EditText</string>
+    <string name="open_location_in_map_button">Open location in map</string>
+    <string name="share_text">Enter a text to share:</string>
+    <string name="share_text_edit_text_content_description">Share text EditText</string>
+    <string name="share_text_content_button">Share text content</string>
 </resources>
