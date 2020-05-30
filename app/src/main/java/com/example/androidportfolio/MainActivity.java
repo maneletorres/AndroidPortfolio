@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("Favorite Toys"));
         tabLayout.addTab(tabLayout.newTab().setText("GitHub Search"));
         tabLayout.addTab(tabLayout.newTab().setText("Sunshine"));
+        tabLayout.addTab(tabLayout.newTab().setText("Intents Practice"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         mPager = findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
                     return new GitHubSearchFragment();
                 case 2:
                     return new SunshineFragment();
+                case 3:
+                    return new IntentsPracticeFragment();
                 default:
                     return null;
             }
