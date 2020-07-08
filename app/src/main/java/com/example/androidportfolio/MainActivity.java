@@ -10,6 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -36,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("GitHub Search"));
         tabLayout.addTab(tabLayout.newTab().setText("Sunshine"));
         tabLayout.addTab(tabLayout.newTab().setText("Intents Practice"));
+        tabLayout.addTab(tabLayout.newTab().setText("Sandwich"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
         mPager = findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -109,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     return new SunshineFragment();
                 case 3:
                     return new IntentsPracticeFragment();
+                case 4:
+                    return new SandwichFragment();
                 default:
                     return null;
             }
