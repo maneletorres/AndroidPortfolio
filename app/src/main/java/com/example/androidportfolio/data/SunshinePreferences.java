@@ -43,7 +43,7 @@ public class SunshinePreferences {
             "1600 Amphitheatre Parkway, Mountain View, CA 94043";
 
     /**
-     * Helper method to handle setting location details in Preferences (City Name, Latitude,
+     * Helper method to handle setting location sunshine_details_menu in Preferences (City Name, Latitude,
      * Longitude)
      *
      * @param c        Context used to get the SharedPreferences
@@ -82,11 +82,10 @@ public class SunshinePreferences {
      * will return is "94043,USA", which is Mountain View, California. Mountain View is the
      * home of the headquarters of the Googleplex!
      *
-     * @param context Context used to get the SharedPreferences
      * @return Location The current user has set in SharedPreferences. Will default to
      * "94043,USA" if SharedPreferences have not been implemented yet.
      */
-    public static String getPreferredWeatherLocation(Context context) {
+    public static String getPreferredWeatherLocation() {
         /** This will be implemented in a future lesson **/
         return getDefaultWeatherLocation();
     }

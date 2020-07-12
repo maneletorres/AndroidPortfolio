@@ -1,19 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ScrollView
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.androidportfolio.ui.favoritetoys.viewmodel.FavoriteToysViewModel" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_toy_names"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/toyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:textSize="20sp" />
 
-    </ScrollView>
+        <TextView
+            android:id="@+id/toyErrorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/load_weather_error_message"
+            android:textSize="22sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-</FrameLayout>
+        <ProgressBar
+            android:id="@+id/toyProgressBar"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+</layout>
