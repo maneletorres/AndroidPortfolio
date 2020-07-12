@@ -1,10 +1,20 @@
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">Android Portfolio</string>
+
+    <!-- FavoriteToys fragment: -->
+    <string name="load_toys_error_message">Failed to get toys, please try again.</string>
+
+    <!-- GitHubSearch fragment: -->
     <string name="github_query_hint">Type a query for GitHub!</string>
     <string name="github_query_text">Enter a search query and your URL will show up here!</string>
     <string name="github_query_result_text">Make a search and your results will show up here!</string>
-    <string name="search">Search</string>
-    <string name="error_message">Failed to get results, please try again.</string>
+
+    <!-- Sunshine fragment: -->
+    <string name="load_weather_error_message">Failed to get weather, please try again.</string>
+
+    <!-- Menus: -->
+    <string name="action_search">Search</string>
+    <string name="action_share">Share</string>
 
     <!-- - - - - - - - - - - - - -->
     <!-- Used throughout Sunshine-->
@@ -18,10 +28,10 @@
     <!--Used by SunshineDateUtils-->
     <!-- - - - - - - - - - - - - -->
 
-    <!-- For labelling today's forecast [CHAR LIMIT=15] -->
+    <!-- For labelling today's sunshine_menu [CHAR LIMIT=15] -->
     <string name="today">Today</string>
 
-    <!-- For labelling tomorrow's forecast [CHAR LIMIT=15] -->
+    <!-- For labelling tomorrow's sunshine_menu [CHAR LIMIT=15] -->
     <string name="tomorrow">Tomorrow</string>
 
     <!-- Date format [CHAR LIMIT=NONE] -->

@@ -15,11 +15,11 @@
 11-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:4:22-64
 12
 13    <application
-13-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:6:5-20:19
+13-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:6:5-21:19
 14        android:allowBackup="true"
 14-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:7:9-35
 15        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-15-->[androidx.core:core:1.1.0] C:\Users\Hiro\.gradle\caches\transforms-2\files-2.1\34b4ab0d8b65ac74ddd00d45b26dd963\core-1.1.0\AndroidManifest.xml:24:18-86
+15-->[androidx.core:core:1.1.0] C:\Users\Hiro\.gradle\caches\transforms-2\files-2.1\03736cf4bc3669a69d502627b70a527e\core-1.1.0\AndroidManifest.xml:24:18-86
 16        android:debuggable="true"
 17        android:icon="@mipmap/ic_launcher"
 17-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:8:9-43
@@ -32,9 +32,9 @@
 21        android:testOnly="true"
 22        android:theme="@style/AppTheme" >
 22-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:12:9-40
-23        <activity android:name="com.example.androidportfolio.MainActivity" >
+23        <activity android:name="com.example.androidportfolio.ui.MainActivity" >
 23-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:13:9-19:20
-23-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:13:19-47
+23-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:13:19-50
 24            <intent-filter>
 24-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:14:13-18:29
 25                <action android:name="android.intent.action.MAIN" />
@@ -46,6 +46,12 @@
 27-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:17:27-74
 28            </intent-filter>
 29        </activity>
-30    </application>
-31
-32</manifest>
+30        <activity
+30-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:20:9-100
+31            android:name="com.example.androidportfolio.ui.DetailActivity"
+31-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:20:19-52
+32            android:parentActivityName="com.example.androidportfolio.ui.MainActivity" />
+32-->D:\Documentos\Projects\Android\Java\AndroidPortfolio\app\src\main\AndroidManifest.xml:20:53-98
+33    </application>
+34
+35</manifest>
