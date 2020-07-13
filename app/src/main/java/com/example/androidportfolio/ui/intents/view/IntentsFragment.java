@@ -7,46 +7,53 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ShareCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.androidportfolio.R;
+import com.example.androidportfolio.databinding.FragmentIntentsPracticeBinding;
+import com.example.androidportfolio.ui.intents.viewmodel.IntentsViewModel;
 
-public class IntentsPracticeFragment extends Fragment implements View.OnClickListener {
+public class IntentsFragment extends Fragment implements View.OnClickListener {
+
+    // Variables:
+    private IntentsViewModel mViewModel;
+    private FragmentIntentsPracticeBinding mBinding;
     private Activity mActivity;
-    private EditText mWebsiteEditText;
-    private Button mOpenWebsiteButton;
-    private EditText mLocationMapEditText;
-    private Button mOpenLocationInMapButton;
-    private EditText mShareTextEditText;
-    private Button mShareTextContentButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_intents_practice, container, false);
-        setHasOptionsMenu(true);
+        // ViewModel:
+        mViewModel = new ViewModelProvider(requireActivity()).get(IntentsViewModel.class);
 
-        mActivity = getActivity();
-        mWebsiteEditText = view.findViewById(R.id.website_edit_text);
-        mOpenWebsiteButton = view.findViewById(R.id.open_website_button);
-        mLocationMapEditText = view.findViewById(R.id.location_map_edit_text);
-        mOpenLocationInMapButton = view.findViewById(R.id.open_location_in_map_button);
-        mShareTextEditText = view.findViewById(R.id.share_text_edit_text);
-        mShareTextContentButton = view.findViewById(R.id.share_text_content_button);
+        // DataBinding:
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_intents_practice, container, false);
+        mBinding.setViewModel(mViewModel);
 
-        setListeners();
+        initializeVariables();
+        setupToolbar();
+        setupListeners();
 
-        return view;
+        return mBinding.getRoot();
     }
 
-    private void setListeners() {
-        mOpenWebsiteButton.setOnClickListener(this);
-        mOpenLocationInMapButton.setOnClickListener(this);
-        mShareTextContentButton.setOnClickListener(this);
+    private void initializeVariables() {
+        mActivity = getActivity();
+    }
+
+    private void setupToolbar() {
+        setHasOptionsMenu(true);
+    }
+
+    private void setupListeners() {
+        mBinding.openWebsiteButton.setOnClickListener(this);
+        mBinding.openLocationInMapButton.setOnClickListener(this);
+        mBinding.shareTextContentButton.setOnClickListener(this);
     }
 
     @Override
@@ -67,7 +74,7 @@ public class IntentsPracticeFragment extends Fragment implements View.OnClickLis
     }
 
     private void openWebPage() {
-        String websiteText = mWebsiteEditText.getText().toString();
+        String websiteText = mBinding.websiteEditText.getText().toString();
         Uri webPage = Uri.parse(websiteText);
         Intent intent = new Intent(Intent.ACTION_VIEW, webPage);
         if (mActivity != null) {
@@ -78,7 +85,7 @@ public class IntentsPracticeFragment extends Fragment implements View.OnClickLis
     }
 
     private void openLocationInMap() {
-        String addressString = mLocationMapEditText.getText().toString();
+        String addressString = mBinding.locationMapEditText.getText().toString();
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("geo")
                 .path("0,0")
@@ -95,8 +102,8 @@ public class IntentsPracticeFragment extends Fragment implements View.OnClickLis
 
     private void shareTextContent() {
         String mimeType = "text/plain";
-        String title = "Text shared";
-        String textToShare = mShareTextEditText.getText().toString();
+        String title = getString(R.string.text_shared);
+        String textToShare = mBinding.shareTextEditText.getText().toString();
         Intent intent = ShareCompat.IntentBuilder.from(mActivity)
                 .setChooserTitle(title)
                 .setType(mimeType)
