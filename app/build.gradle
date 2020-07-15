@@ -32,6 +32,8 @@ android {
 }
 
 dependencies {
+    def nav_version = "2.3.0-rc01"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -43,11 +45,24 @@ dependencies {
     // ViewModel:
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"
 
+    // Navigation:
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+
     // Lottie:
     // implementation 'com.airbnb.android:lottie:2.5.0'
+
+    // Picasso:
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Timber:
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Testing:
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Testing Navigation
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 }
