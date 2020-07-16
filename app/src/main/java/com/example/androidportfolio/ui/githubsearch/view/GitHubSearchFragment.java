@@ -84,8 +84,8 @@ public class GitHubSearchFragment extends Fragment {
         String gitHubQuery = responsePair.first;
         String gitHubSearchResult = responsePair.second;
 
-        mBinding.pbLoadingIndicator.setVisibility(GONE);
-        mBinding.tvErrorMessageDisplay.setVisibility(GONE);
+        mBinding.githubSearchProgressBar.setVisibility(GONE);
+        mBinding.tvGithubSearchErrorMessage.setVisibility(GONE);
         mBinding.tvUrlDisplay.setVisibility(VISIBLE);
         mBinding.tvGithubSearchResultsJson.setVisibility(VISIBLE);
 
@@ -96,14 +96,14 @@ public class GitHubSearchFragment extends Fragment {
     private void showProgressBar() {
         mBinding.tvUrlDisplay.setVisibility(GONE);
         mBinding.tvGithubSearchResultsJson.setVisibility(GONE);
-        mBinding.tvErrorMessageDisplay.setVisibility(GONE);
-        mBinding.pbLoadingIndicator.setVisibility(VISIBLE);
+        mBinding.tvGithubSearchErrorMessage.setVisibility(GONE);
+        mBinding.githubSearchProgressBar.setVisibility(VISIBLE);
     }
 
     private void showLoadGithubSearchErrorMessage() {
-        mBinding.pbLoadingIndicator.setVisibility(GONE);
+        mBinding.githubSearchProgressBar.setVisibility(GONE);
         mBinding.tvUrlDisplay.setVisibility(GONE);
         mBinding.tvGithubSearchResultsJson.setVisibility(View.GONE);
-        mBinding.tvErrorMessageDisplay.setVisibility(VISIBLE);
+        mBinding.tvGithubSearchErrorMessage.setVisibility(VISIBLE);
     }
 }
