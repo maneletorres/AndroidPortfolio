@@ -21,6 +21,7 @@ public class GitHubSearchViewModel extends ViewModel {
 
     // Observables:
     private final MutableLiveData<Resource<Pair<String, String>>> _loadingGitHubSearchResultObservable = new MutableLiveData<>();
+
     public LiveData<Resource<Pair<String, String>>> loadingGitHubSearchResultObservable() {
         return _loadingGitHubSearchResultObservable;
     }
@@ -53,7 +54,8 @@ public class GitHubSearchViewModel extends ViewModel {
 
         @Override
         protected void onPostExecute(Pair<String, String> gitHubSearchResult) {
-            if (gitHubSearchResult != null) _loadingGitHubSearchResultObservable.postValue(new Resource<>(SUCCESS, gitHubSearchResult, null));
+            if (gitHubSearchResult != null)
+                _loadingGitHubSearchResultObservable.postValue(new Resource<>(SUCCESS, gitHubSearchResult, null));
             else _loadingGitHubSearchResultObservable.postValue(new Resource<>(ERROR, null, null));
         }
     }
