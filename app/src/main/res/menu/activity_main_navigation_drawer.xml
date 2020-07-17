@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_favorite_toys"
+            android:title="@string/favorite_toys_fragment_title" />
+
+        <item
+            android:id="@+id/nav_github_search"
+            android:title="@string/github_search_fragment_title" />
+
+        <item
+            android:id="@+id/nav_sunshine"
+            android:title="@string/sunshine_fragment_title" />
+
+        <item
+            android:id="@+id/nav_intents"
+            android:title="@string/intents_fragment_title" />
+
+        <item
+            android:id="@+id/nav_sandwich"
+            android:title="@string/sandwiches_fragment_title" />
+
+        <item
+            android:id="@+id/nav_movies"
+            android:title="@string/movies_fragment_title" />
+
+        <item
+            android:id="@+id/nav_versus"
+            android:title="@string/versus_fragment_title" />
+
+        <item
+            android:id="@+id/nav_network_manager"
+            android:title="@string/network_manager_fragment_title" />
+
+        <item
+            android:id="@+id/nav_garden_manager"
+            android:title="@string/garden_manager_fragment_title" />
+    </group>
+</menu>

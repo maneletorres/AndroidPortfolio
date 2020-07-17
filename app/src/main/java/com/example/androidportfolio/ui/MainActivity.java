@@ -1,119 +1,104 @@
 package com.example.androidportfolio.ui;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-
-import android.os.Bundle;
-import android.view.Menu;
 
 import com.example.androidportfolio.R;
 import com.example.androidportfolio.ui.favoritetoys.view.FavoriteToysFragment;
+import com.example.androidportfolio.ui.gardenmanager.view.GardenManagerFragment;
 import com.example.androidportfolio.ui.githubsearch.view.GitHubSearchFragment;
-import com.example.androidportfolio.ui.intents.view.IntentsPracticeFragment;
-import com.example.androidportfolio.ui.sandwitch.view.SandwichFragment;
+import com.example.androidportfolio.ui.intents.view.IntentsFragment;
+import com.example.androidportfolio.ui.movies.view.MoviesFragment;
+import com.example.androidportfolio.ui.networkmanager.view.NetworkManagerFragment;
+import com.example.androidportfolio.ui.sandwich.view.SandwichFragment;
 import com.example.androidportfolio.ui.sunshine.view.SunshineFragment;
-import com.google.android.material.tabs.TabLayout;
+import com.example.androidportfolio.ui.versus.view.VersusFragment;
+import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
-    private ViewPager mPager;
+import static androidx.core.view.GravityCompat.START;
 
-    /**
-     * The pager adapter, which provides the pages to the view pager widget.
-     */
-    private PagerAdapter mPagerAdapter;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final int FIRST_MENU_ITEM = 0;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Favorite Toys"));
-        tabLayout.addTab(tabLayout.newTab().setText("GitHub Search"));
-        tabLayout.addTab(tabLayout.newTab().setText("Sunshine"));
-        /* tabLayout.addTab(tabLayout.newTab().setText("Intents Practice"));
-        tabLayout.addTab(tabLayout.newTab().setText("Sandwich")); */
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.app_name));
+        setSupportActionBar(toolbar);
 
-        mPager = findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                mPager.setCurrentItem(tab.getPosition());
-            }
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+        NavigationView mNavigationView = findViewById(R.id.navigation_view);
+        mNavigationView.setNavigationItemSelectedListener(this);
 
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        mPager.setAdapter(mPagerAdapter);
+        MenuItem menuItem = mNavigationView.getMenu().getItem(FIRST_MENU_ITEM);
+        onNavigationItemSelected(menuItem);
+        menuItem.setChecked(true);
     }
 
     @Override
     public void onBackPressed() {
-        if (mPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
+        if (mDrawerLayout.isDrawerOpen(START)) mDrawerLayout.closeDrawer(START);
+        else super.onBackPressed();
     }
 
-    /**
-     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
-     * sequence.
-     */
-    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
-        /**
-         * The number of pages (wizard steps) to show in this demo.
-         */
-        int mTabsNumber;
-
-        ScreenSlidePagerAdapter(FragmentManager fm, int tabsNumber) {
-            super(fm);
-            this.mTabsNumber = tabsNumber;
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Fragment fragment;
+        switch (menuItem.getItemId()) {
+            case R.id.nav_favorite_toys:
+                fragment = new FavoriteToysFragment();
+                break;
+            case R.id.nav_github_search:
+                fragment = new GitHubSearchFragment();
+                break;
+            case R.id.nav_sunshine:
+                fragment = new SunshineFragment();
+                break;
+            case R.id.nav_intents:
+                fragment = new IntentsFragment();
+                break;
+            case R.id.nav_sandwich:
+                fragment = new SandwichFragment();
+                break;
+            case R.id.nav_movies:
+                fragment = new MoviesFragment();
+                break;
+            case R.id.nav_versus: // TODO - Create an API that is nurtured by WebScrapping from DeviceSpecifications.
+                fragment = new VersusFragment();
+                break;
+            case R.id.nav_network_manager:
+                fragment = new NetworkManagerFragment();
+                break;
+            case R.id.nav_garden_manager:
+                fragment = new GardenManagerFragment();
+                break;
+            default:
+                throw new IllegalArgumentException(getString(R.string.menu_option_not_implemented));
         }
 
-        @Override
-        public int getCount() {
-            return mTabsNumber;
-        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.main_linear_layout, fragment).commit();
 
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new FavoriteToysFragment();
-                case 1:
-                    return new GitHubSearchFragment();
-                case 2:
-                    return new SunshineFragment();
-                /* case 3:
-                    return new IntentsPracticeFragment();
-                case 4:
-                    return new SandwichFragment();*/
-                default:
-                    return null;
-            }
-        }
+        mDrawerLayout.closeDrawer(START);
+
+        return true;
     }
 }
