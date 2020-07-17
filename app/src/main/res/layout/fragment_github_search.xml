@@ -48,7 +48,7 @@
             </ScrollView>
 
             <TextView
-                android:id="@+id/tv_error_message_display"
+                android:id="@+id/tv_github_search_error_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/double_padding"
@@ -57,7 +57,7 @@
                 android:visibility="invisible" />
 
             <ProgressBar
-                android:id="@+id/pb_loading_indicator"
+                android:id="@+id/github_search_progress_bar"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_gravity="center"

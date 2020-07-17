@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.example.androidportfolio.ui.sunshine.viewmodel.SunshineViewModel" />
+            type="com.example.androidportfolio.ui.sandwich.viewmodel.SandwichViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.sandwich.view.SandwichFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/weather_recyclerview"
+            android:id="@+id/sandwich_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:listitem="@layout/sandwich_list_item" />
 
         <TextView
-            android:id="@+id/tv_sunshine_error_message"
+            android:id="@+id/tv_sandwich_error_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/load_weather_error_message"
+            android:text="@string/load_sandwich_error_message"
             android:textSize="22sp"
             android:visibility="gone"
             tools:visibility="visible" />
 
         <ProgressBar
-            android:id="@+id/sunshine_progress_bar"
+            android:id="@+id/sandwich_progress_bar"
             android:layout_width="42dp"
             android:layout_height="42dp"
             android:layout_gravity="center"
