@@ -48,7 +48,7 @@ public class SandwichAdapter extends RecyclerView.Adapter<SandwichAdapter.Sandwi
     }
 
     public interface SandwichAdapterOnClickHandler {
-        void onClick(int clickedSandwichIndex, String clickedSandwichName, View view);
+        void onClick(int clickedSandwichIndex, String clickedSandwichName);
     }
 
     class SandwichViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,7 +63,7 @@ public class SandwichAdapter extends RecyclerView.Adapter<SandwichAdapter.Sandwi
 
         @Override
         public void onClick(View view) {
-            mClickHandler.onClick(getAdapterPosition(), mSandwichData[getAdapterPosition()], view);
+            mClickHandler.onClick(getAdapterPosition(), mSandwichData[getAdapterPosition()]);
         }
     }
 }

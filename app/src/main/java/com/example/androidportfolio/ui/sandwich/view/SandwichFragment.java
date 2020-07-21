@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.androidportfolio.R;
 import com.example.androidportfolio.databinding.FragmentSandwichBinding;
+import com.example.androidportfolio.ui.MainActivity;
 import com.example.androidportfolio.ui.sandwich.adapter.SandwichAdapter;
 import com.example.androidportfolio.ui.sandwich.viewmodel.SandwichViewModel;
 
@@ -28,8 +29,7 @@ public class SandwichFragment extends Fragment implements SandwichAdapter.Sandwi
     private SandwichAdapter mSandwichAdapter;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // ViewModel:
         mViewModel = new ViewModelProvider(requireActivity()).get(SandwichViewModel.class);
 
@@ -37,6 +37,7 @@ public class SandwichFragment extends Fragment implements SandwichAdapter.Sandwi
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sandwich, container, false);
         mBinding.setViewModel(mViewModel);
 
+        setupToolbar();
         setupUI();
         setupObservers();
 
@@ -46,7 +47,7 @@ public class SandwichFragment extends Fragment implements SandwichAdapter.Sandwi
     }
 
     @Override
-    public void onClick(int clickedSandwichIndex, String clickedSandwichName, View view) {
+    public void onClick(int clickedSandwichIndex, String clickedSandwichName) {
         // NavigationUI:
         /*SandwichFragmentDirections.OpenSandwichDetail action = SandwichFragmentDirections.openSandwichDetail(clickedSandwichName);
         action.setSandwichListPosition(clickedSandwichIndex);
@@ -61,6 +62,12 @@ public class SandwichFragment extends Fragment implements SandwichAdapter.Sandwi
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.main_linear_layout, fragment).addToBackStack(getString(R.string.sandwiches_fragment_title)).commit();
+    }
+
+    private void setupToolbar() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity != null)
+            mainActivity.setToolbarTitle(getString(R.string.sandwiches_fragment_title));
     }
 
     private void setupUI() {

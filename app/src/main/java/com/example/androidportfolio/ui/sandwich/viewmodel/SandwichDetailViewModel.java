@@ -55,9 +55,9 @@ public class SandwichDetailViewModel extends ViewModel {
         }
 
         @Override
-        protected void onPostExecute(Sandwich sandwich) {
-            if (sandwich != null)
-                _loadingSandwichDetailObservable.postValue(new Resource<>(SUCCESS, sandwich, null));
+        protected void onPostExecute(Sandwich sandwichData) {
+            if (sandwichData != null)
+                _loadingSandwichDetailObservable.postValue(new Resource<>(SUCCESS, sandwichData, null));
             else _loadingSandwichDetailObservable.postValue(new Resource<>(ERROR, null, null));
         }
     }

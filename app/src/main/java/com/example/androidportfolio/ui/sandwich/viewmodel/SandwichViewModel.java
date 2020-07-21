@@ -42,11 +42,11 @@ public class SandwichViewModel extends ViewModel {
         }
 
         @Override
-        protected void onPostExecute(String[] sandwichData) {
-            if (sandwichData == null)
+        protected void onPostExecute(String[] sandwichListData) {
+            if (sandwichListData == null)
                 _loadingSandwichesObservable.postValue(new Resource<>(ERROR, null, null));
             else
-                _loadingSandwichesObservable.postValue(new Resource<>(SUCCESS, sandwichData, null));
+                _loadingSandwichesObservable.postValue(new Resource<>(SUCCESS, sandwichListData, null));
         }
     }
 }
