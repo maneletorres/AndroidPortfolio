@@ -34,19 +34,27 @@ public class NetworkUtils {
     final static String GITHUB_BASE_URL =
             "https://api.github.com/search/repositories";
 
-    final static String PARAM_QUERY = "q";
-
     /*
      * The sort field. One of stars, forks, or updated.
      * Default: results are sorted by best match if no field is specified.
      */
-    final static String PARAM_SORT = "sort";
+    final static String SORT_PARAM = "sort";
     final static String sortBy = "stars";
 
     final static String QUERY_PARAM = "q";
     final static String LAT_PARAM = "lat";
     final static String LON_PARAM = "lon";
     final static String FORMAT_PARAM = "mode";
+    final static String API_KEY_PARAM = "api_key";
+
+    /*
+
+     */
+    final static String TMDB_BASE_URL = "http://api.themoviedb.org/3/movie/popular?";
+
+    final static String PARAM_API_KEY = "api_key";
+
+    final static String TMDB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
 
     /*
      * NOTE: These values only effect responses from OpenWeatherMap, NOT from the fake weather
@@ -76,7 +84,11 @@ public class NetworkUtils {
      * @return The URL to use to query the GitHub server.
      */
     public static URL buildGithubUrl(String githubSearchQuery) {
-        Uri uri = Uri.parse(GITHUB_BASE_URL).buildUpon().appendQueryParameter(PARAM_QUERY, githubSearchQuery).appendQueryParameter(PARAM_SORT, sortBy).build();
+        Uri uri = Uri.parse(GITHUB_BASE_URL)
+                .buildUpon()
+                .appendQueryParameter(QUERY_PARAM, githubSearchQuery)
+                .appendQueryParameter(SORT_PARAM, sortBy)
+                .build();
         URL url = null;
         try {
             url = new URL(uri.toString());
@@ -95,7 +107,8 @@ public class NetworkUtils {
      * @return The URL to use to query the weather server.
      */
     public static URL buildSunshineUrl(String locationQuery) {
-        Uri uri = Uri.parse(FORECAST_BASE_URL).buildUpon()
+        Uri uri = Uri.parse(FORECAST_BASE_URL)
+                .buildUpon()
                 .appendQueryParameter(QUERY_PARAM, locationQuery)
                 .appendQueryParameter(FORMAT_PARAM, format)
                 .appendQueryParameter(UNITS_PARAM, units)
@@ -109,6 +122,26 @@ public class NetworkUtils {
         }
 
         Log.v(TAG, "Built URI " + url);
+
+        return url;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static URL buildTMDBUrl() {
+        Uri uri = Uri.parse(TMDB_BASE_URL)
+                .buildUpon()
+                .appendQueryParameter(API_KEY_PARAM, "53d8684e54311e305e04667194bbd1bb")
+                //.appendQueryParameter(PARAM_SORT, sortBy)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(uri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         return url;
     }
