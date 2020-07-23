@@ -4,14 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,18 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.androidportfolio.R;
 import com.example.androidportfolio.data.model.Movie;
 import com.example.androidportfolio.databinding.FragmentMoviesBinding;
-import com.example.androidportfolio.ui.favoritetoys.adapter.ToyAdapter;
 import com.example.androidportfolio.ui.movies.adapter.MovieAdapter;
 import com.example.androidportfolio.ui.movies.viewmodel.MoviesViewModel;
-import com.example.androidportfolio.ui.sandwich.view.SandwichDetailFragment;
 
 import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static com.example.androidportfolio.utils.Status.ERROR;
-import static com.example.androidportfolio.utils.Status.LOADING;
-import static com.example.androidportfolio.utils.Status.SUCCESS;
 
 public class MoviesFragment extends Fragment implements MovieAdapter.MovieAdapterOnClickHandler {
 
