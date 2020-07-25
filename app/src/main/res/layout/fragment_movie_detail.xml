@@ -10,75 +10,151 @@
             type="com.example.androidportfolio.ui.movies.viewmodel.MovieDetailViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/double_padding">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/cover_iv"
-            android:layout_width="200dp"
-            android:layout_height="300dp"
-            app:layout_constraintBottom_toTopOf="@+id/overview_tv"
-            app:layout_constraintEnd_toStartOf="@id/movie_info_ll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/movie_info_ll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cover_iv"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/release_date_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="2015" />
-
-            <TextView
-                android:text="120min"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="120min" />
-
-            <TextView
-                android:id="@+id/vote_average_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="8.1/10" />
-
-            <Button
-                android:id="@+id/mark_as_favorite_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Mark as favorite" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/overview_tv"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/double_padding"
-            app:layout_constraintBottom_toTopOf="@+id/trailers_lv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cover_iv"
-            tools:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot." />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/trailers_lv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/double_padding"
-            android:text="Trailers:"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/overview_tv" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mainConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/double_padding">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/coverImageView"
+                    android:layout_width="200dp"
+                    android:layout_height="250dp"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:layout_marginRight="@dimen/default_margin"
+                    app:layout_constraintBottom_toTopOf="@+id/overviewTextView"
+                    app:layout_constraintEnd_toStartOf="@id/movieInfoLinearLayout"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_network_manager" />
+
+                <LinearLayout
+                    android:id="@+id/movieInfoLinearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/coverImageView"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/releaseDateTextView"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="2015" />
+
+                    <TextView
+                        android:id="@+id/durationTextView"
+                        style="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="120min" />
+
+                    <TextView
+                        android:id="@+id/voteAverageTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        tools:text="8.1/10" />
+
+                    <Button
+                        android:id="@+id/markAsFavoriteButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mark_as_favorite_button" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/overviewTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/double_padding"
+                    app:layout_constraintBottom_toTopOf="@+id/trailersLinearLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/coverImageView"
+                    tools:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy. Chappie he is a robot." />
+
+                <LinearLayout
+                    android:id="@+id/trailersLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@+id/reviewsLinearLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/overviewTextView"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/trailersLabelTextView"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/double_padding"
+                        android:text="@string/trailers_label" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/trailerRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/reviewsLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/trailersLinearLayout"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/reviewsLabelTextView"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/double_padding"
+                        android:text="@string/reviews_label" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/reviewRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/movieErrorTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/double_margin"
+                android:layout_marginEnd="@dimen/double_margin"
+                android:gravity="center"
+                android:text="@string/load_movie_error_message"
+                android:textSize="22sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </FrameLayout>
+
+    </ScrollView>
 </layout>

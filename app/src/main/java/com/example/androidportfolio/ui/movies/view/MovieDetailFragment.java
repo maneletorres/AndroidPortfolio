@@ -1,36 +1,41 @@
 package com.example.androidportfolio.ui.movies.view;
 
-import android.os.Build;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.androidportfolio.R;
 import com.example.androidportfolio.data.model.Movie;
+import com.example.androidportfolio.data.model.Review;
 import com.example.androidportfolio.data.model.Trailer;
 import com.example.androidportfolio.databinding.FragmentMovieDetailBinding;
 import com.example.androidportfolio.ui.MainActivity;
+import com.example.androidportfolio.ui.movies.adapter.ReviewAdapter;
+import com.example.androidportfolio.ui.movies.adapter.TrailerAdapter;
 import com.example.androidportfolio.ui.movies.viewmodel.MovieDetailViewModel;
 import com.example.androidportfolio.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
+import java.net.URL;
 import java.util.List;
 
-public class MovieDetailFragment extends Fragment {
+import static android.view.View.GONE;
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
+public class MovieDetailFragment extends Fragment implements TrailerAdapter.TrailerAdapterOnClickHandler, ReviewAdapter.ReviewAdapterOnClickHandler {
 
     private MovieDetailViewModel mViewModel;
     private FragmentMovieDetailBinding mBinding;
@@ -47,7 +52,7 @@ public class MovieDetailFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            Movie movie = (Movie) bundle.getParcelable("clicked_movie");
+            Movie movie = (Movie) bundle.getParcelable(getString(R.string.clicked_movie_key));
             if (movie != null) {
                 setupToolbar(movie.getTitle());
                 setupUI(movie);
@@ -55,9 +60,23 @@ public class MovieDetailFragment extends Fragment {
 
                 mViewModel.loadMovieData(movie.getId());
             }
-        } else closeOnError();
+        } else showLoadMovieErrorMessage();
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onTrailerClick(Trailer trailer) {
+        URL youtubeUrl = NetworkUtils.buildYouTubeUrl(trailer.getKey());
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl.toString()));
+
+        if (intent.resolveActivity(requireActivity().getPackageManager()) != null) startActivity(intent);
+        else Toast.makeText(requireContext(), getString(R.string.load_trailer_error_message), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onReviewClick(Review review) {
+        // TODO: Should the review press do something?
     }
 
     private void setupToolbar(String movieTitle) {
@@ -68,11 +87,12 @@ public class MovieDetailFragment extends Fragment {
     private void setupUI(Movie movie) {
         Picasso.get()
                 .load(NetworkUtils.IMAGE_TMDB_URL + movie.getPosterPath())
-                .into(mBinding.coverIv);
+                .into(mBinding.coverImageView);
 
-        mBinding.releaseDateTv.setText(movie.getReleaseDate());
-        mBinding.voteAverageTv.setText(String.valueOf(movie.getVoteAverage() + "/10"));
-        mBinding.overviewTv.setText(movie.getOverview());
+        mBinding.releaseDateTextView.setText(movie.getReleaseDate());
+        // TODO: mBinding.durationTextView.setText("");
+        mBinding.voteAverageTextView.setText(movie.getVoteAverage() + "/10");
+        mBinding.overviewTextView.setText(movie.getOverview());
     }
 
     private void setupObservers() {
@@ -80,68 +100,78 @@ public class MovieDetailFragment extends Fragment {
             switch (loadingStatus.getStatus()) {
                 case SUCCESS:
                     showTrailers(loadingStatus.getData());
-                    // Log.v("TRAILERS", loadingStatus.getData().toString());
                     break;
                 case LOADING:
-                    // showProgressBar();
+                    // TODO: hideTrailersRecyclerView();
                     break;
                 case ERROR:
-                    // showLoadToyErrorMessage();
+                    hideTrailers();
                     break;
-                default:
-                    // TODO
             }
         });
 
         mViewModel.loadingReviewsObservable().observe(getViewLifecycleOwner(), loadingStatus -> {
             switch (loadingStatus.getStatus()) {
                 case SUCCESS:
-                    Log.v("REVIEWS", loadingStatus.getData().toString());
+                    showReviews(loadingStatus.getData());
                     break;
                 case LOADING:
-                    // showProgressBar();
+                    // TODO: hideReviewsRecyclerView();
                     break;
                 case ERROR:
-                    // showLoadToyErrorMessage();
+                    hideReviews();
                     break;
-                default:
-                    // TODO
             }
         });
     }
 
     private void showTrailers(List<Trailer> trailers) {
-        ConstraintSet set = new ConstraintSet();
+        if (trailers != null && trailers.size() > 0) {
+            // Trailer recyclerView configuration:
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            mBinding.trailerRecyclerView.setLayoutManager(linearLayoutManager);
+            mBinding.trailerRecyclerView.setHasFixedSize(true);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mBinding.trailerRecyclerView.getContext(), linearLayoutManager.getOrientation());
+            mBinding.trailerRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        int previousId = -1;
-        for (int i = 0; i < trailers.size(); i++) {
-            TextView childView = new TextView(requireContext());
-            childView.setText("Trailer " + i);
+            // TrailerAdapter configuration:
+            TrailerAdapter mTrailerAdapter = new TrailerAdapter(this);
+            mBinding.trailerRecyclerView.setAdapter(mTrailerAdapter);
 
-            int currentId = View.generateViewId();
-
-            childView.setId(currentId);
-            mBinding.trailersLl.addView(childView, i);
-
-            set.clone(mBinding.trailersLl);
-            set.connect(childView.getId(), ConstraintSet.START, mBinding.trailersLl.getId(), ConstraintSet.START, 0);
-            set.connect(childView.getId(), ConstraintSet.END, mBinding.trailersLl.getId(), ConstraintSet.END, 0);
-
-            if (i == 0) {
-                set.connect(childView.getId(), ConstraintSet.TOP, mBinding.trailersLl.getId(), ConstraintSet.TOP, 0);
-                // set.connect(childView.getId(), ConstraintSet.BOTTOM, mBinding.trailersLl.getId(), ConstraintSet.BOTTOM, 0);
-            } else {
-                set.connect(childView.getId(), ConstraintSet.TOP, previousId, ConstraintSet.BOTTOM, 0);
-                //set.connect(childView.getId(), ConstraintSet.BOTTOM, mBinding.trailersLl.getId(), ConstraintSet.BOTTOM, 0);
-            }
-
-            previousId = currentId;
-
-            set.applyTo(mBinding.trailersLl);
+            mBinding.trailersLinearLayout.setVisibility(VISIBLE);
+            mTrailerAdapter.setTrailersData(trailers);
         }
     }
 
-    private void closeOnError() {
-        // Toast.makeText(requireContext(), getString(R.string.movie_detail_error_message), Toast.LENGTH_SHORT).show();
+    private void hideTrailers() {
+        mBinding.trailersLinearLayout.setVisibility(GONE);
+    }
+
+    private void showReviews(List<Review> reviews) {
+        if (reviews != null && reviews.size() > 0) {
+            // Review recyclerView configuration:
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            mBinding.reviewRecyclerView.setLayoutManager(linearLayoutManager);
+            mBinding.reviewRecyclerView.setHasFixedSize(true);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mBinding.reviewRecyclerView.getContext(), linearLayoutManager.getOrientation());
+            mBinding.reviewRecyclerView.addItemDecoration(dividerItemDecoration);
+
+            // ReviewAdapter configuration:
+            ReviewAdapter mReviewAdapter = new ReviewAdapter(this);
+            mBinding.reviewRecyclerView.setAdapter(mReviewAdapter);
+
+            mBinding.reviewsLinearLayout.setVisibility(VISIBLE);
+            mReviewAdapter.setReviewsData(reviews);
+        }
+    }
+
+    private void hideReviews() {
+        mBinding.reviewsLinearLayout.setVisibility(GONE);
+    }
+
+    private void showLoadMovieErrorMessage() {
+        // TODO - Center error message TextView.
+        mBinding.mainConstraintLayout.setVisibility(INVISIBLE);
+        mBinding.movieErrorTextView.setVisibility(VISIBLE);
     }
 }

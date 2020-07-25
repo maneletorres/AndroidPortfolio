@@ -4,13 +4,15 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidportfolio.R;
 import com.example.androidportfolio.data.model.Movie;
+import com.example.androidportfolio.utilities.NetworkUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -35,7 +37,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
         Movie movie = mMovieData.get(position);
-        holder.mMovieTextView.setText(movie.getTitle());
+        Picasso.get()
+                .load(NetworkUtils.IMAGE_TMDB_URL + movie.getPosterPath())
+                .into(holder.mMovieImageView);
     }
 
     @Override
@@ -46,25 +50,26 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public void setMoviesData(List<Movie> movies) {
         mMovieData = movies;
+        notifyDataSetChanged();
     }
 
     public interface MovieAdapterOnClickHandler {
-        void onClick(Movie movie);
+        void onMovieClick(Movie movie);
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mMovieTextView;
+        private ImageView mMovieImageView;
 
         public MovieViewHolder(@NonNull View itemView) {
             super(itemView);
-            mMovieTextView = itemView.findViewById(R.id.tv_movie_data);
+            mMovieImageView = itemView.findViewById(R.id.movie_cover_iv);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             Movie movie = mMovieData.get(getAdapterPosition());
-            mClickHandler.onClick(movie);
+            mClickHandler.onMovieClick(movie);
         }
     }
 }
