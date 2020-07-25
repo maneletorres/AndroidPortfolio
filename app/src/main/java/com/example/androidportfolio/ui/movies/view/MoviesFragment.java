@@ -2,6 +2,9 @@ package com.example.androidportfolio.ui.movies.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -10,7 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.androidportfolio.R;
@@ -18,6 +21,7 @@ import com.example.androidportfolio.data.model.Movie;
 import com.example.androidportfolio.databinding.FragmentMoviesBinding;
 import com.example.androidportfolio.ui.movies.adapter.MovieAdapter;
 import com.example.androidportfolio.ui.movies.viewmodel.MoviesViewModel;
+import com.example.androidportfolio.utilities.NetworkUtils;
 
 import java.util.List;
 
@@ -26,6 +30,7 @@ import static android.view.View.VISIBLE;
 
 public class MoviesFragment extends Fragment implements MovieAdapter.MovieAdapterOnClickHandler {
 
+    private static final int SPAN_COUNT = 2;
     private MoviesViewModel mViewModel;
     private FragmentMoviesBinding mBinding;
     private MovieAdapter mMovieAdapter;
@@ -51,9 +56,29 @@ public class MoviesFragment extends Fragment implements MovieAdapter.MovieAdapte
     }
 
     @Override
-    public void onClick(Movie movie) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.movies_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_top_rated:
+                mViewModel.loadMovies(NetworkUtils.TOP_RATED_PARAM);
+                return true;
+            case R.id.action_most_popular:
+                mViewModel.loadMovies(NetworkUtils.POPULAR_PARAM);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onMovieClick(Movie movie) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable("clicked_movie", movie);
+        bundle.putParcelable(getString(R.string.clicked_movie_key), movie);
 
         Fragment fragment = new MovieDetailFragment();
         fragment.setArguments(bundle);
@@ -62,18 +87,16 @@ public class MoviesFragment extends Fragment implements MovieAdapter.MovieAdapte
     }
 
     private void setupToolbar() {
-
+        setHasOptionsMenu(true);
     }
 
     private void setupUI() {
-        // RecyclerView configuration:
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        // Movies recyclerView configuration:
+        LinearLayoutManager linearLayoutManager = new GridLayoutManager(getContext(), SPAN_COUNT);
         mBinding.moviesRecyclerView.setLayoutManager(linearLayoutManager);
         mBinding.moviesRecyclerView.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mBinding.moviesRecyclerView.getContext(), linearLayoutManager.getOrientation());
-        mBinding.moviesRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        // ToyAdapter configuration:
+        // MovieAdapter configuration:
         mMovieAdapter = new MovieAdapter(this);
         mBinding.moviesRecyclerView.setAdapter(mMovieAdapter);
     }
@@ -90,8 +113,6 @@ public class MoviesFragment extends Fragment implements MovieAdapter.MovieAdapte
                 case ERROR:
                     showLoadToyErrorMessage();
                     break;
-                default:
-                    // TODO
             }
         });
     }

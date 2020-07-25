@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.androidportfolio.ui.movies.viewmodel.MoviesViewModel" />
@@ -25,7 +26,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/load_weather_error_message"
+            android:text="@string/load_movies_error_message"
             android:textSize="22sp"
             android:visibility="gone"
             tools:visibility="visible" />

@@ -20,18 +20,24 @@ import static com.example.androidportfolio.utils.Status.LOADING;
 import static com.example.androidportfolio.utils.Status.SUCCESS;
 
 public class MoviesViewModel extends ViewModel {
-    // Observables:
     private final MutableLiveData<Resource<List<Movie>>> _loadingMoviesObservable = new MutableLiveData<>();
+    private String searchCriteria = NetworkUtils.POPULAR_PARAM;
 
     public LiveData<Resource<List<Movie>>> loadingMoviesObservable() {
         return _loadingMoviesObservable;
     }
 
     public void start() {
-        new FetchMoviesTask().execute();
+        new FetchMoviesTask().execute(searchCriteria);
     }
 
-    public class FetchMoviesTask extends AsyncTask<Void, Void, List<Movie>> {
+    public void loadMovies(String searchParameter) {
+        searchCriteria = searchParameter;
+        new FetchMoviesTask().execute(searchCriteria);
+    }
+
+    // TODO - Apply coroutine to do the API call.
+    public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
 
         @Override
         protected void onPreExecute() {
@@ -40,21 +46,20 @@ public class MoviesViewModel extends ViewModel {
         }
 
         @Override
-        protected List<Movie> doInBackground(Void... params) {
-            //if (params == null) return null;
+        protected List<Movie> doInBackground(String... params) {
+            if (params == null) return null;
 
-            URL weatherRequestUrl = NetworkUtils.buildTMDBUrl();
+            URL moviesRequestUrl = NetworkUtils.buildTMDBUrl(params[0]);
 
-            List<Movie> simpleJsonWeatherData = new ArrayList<>();
+            List<Movie> movieDataJson = new ArrayList<>();
             try {
-                String jsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(weatherRequestUrl);
-
-                simpleJsonWeatherData = MovieParser.getMoviesFromJson(jsonWeatherResponse);
+                String jsonMoviesResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
+                movieDataJson = MovieParser.getMoviesFromJson(jsonMoviesResponse);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return simpleJsonWeatherData;
+            return movieDataJson;
         }
 
         @Override
