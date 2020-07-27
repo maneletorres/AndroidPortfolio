@@ -3,22 +3,38 @@ package com.example.androidportfolio.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Movie implements Parcelable {
+    @SerializedName("popularity")
     private double popularity;
+    @SerializedName("vote_count")
     private double voteCount;
+    @SerializedName("video")
     private boolean video;
+    @SerializedName("poster_path")
     private String posterPath;
+    @SerializedName("id")
     private int id;
+    @SerializedName("adult")
     private boolean adult;
+    @SerializedName("backdrop_path")
     private String backdropPath;
+    @SerializedName("original_language")
     private String originalLanguage;
+    @SerializedName("original_title")
     private String originalTitle;
+    @SerializedName("genre_ids")
     private List<Integer> genreIds;
+    @SerializedName("title")
     private String title;
+    @SerializedName("vote_average")
     private double voteAverage;
+    @SerializedName("overview")
     private String overview;
+    @SerializedName("release_date")
     private String releaseDate;
 
     public Movie(double popularity, double voteCount, boolean video, String posterPath, int id, boolean adult, String backdropPath, String originalLanguage, String originalTitle, String title, double voteAverage, String overview, String releaseDate) {
