@@ -1,19 +1,22 @@
 package com.example.androidportfolio.ui.movies.viewmodel;
 
-import android.os.AsyncTask;
-
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.androidportfolio.data.model.Movie;
-import com.example.androidportfolio.utilities.MovieParser;
+import com.example.androidportfolio.data.model.Movies;
+import com.example.androidportfolio.data.repository.TheMovieDatabaseService;
+import com.example.androidportfolio.utilities.Constants;
 import com.example.androidportfolio.utilities.NetworkUtils;
 import com.example.androidportfolio.utils.Resource;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.androidportfolio.utils.Status.ERROR;
 import static com.example.androidportfolio.utils.Status.LOADING;
@@ -28,45 +31,36 @@ public class MoviesViewModel extends ViewModel {
     }
 
     public void start() {
-        new FetchMoviesTask().execute(searchCriteria);
+        fetchMovies();
     }
 
     public void loadMovies(String searchParameter) {
         searchCriteria = searchParameter;
-        new FetchMoviesTask().execute(searchCriteria);
+        fetchMovies();
     }
 
-    // TODO - Apply coroutine to do the API call.
-    public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>> {
+    public void fetchMovies() {
+        _loadingMoviesObservable.postValue(new Resource<>(LOADING, null, null));
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            _loadingMoviesObservable.postValue(new Resource<>(LOADING, null, null));
-        }
+        new TheMovieDatabaseService().getApiService().getMovies(searchCriteria, Constants.API_KEY)
+                .enqueue(new Callback<Movies>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Movies> call, @NonNull Response<Movies> response) {
+                        Movies moviesResponse = response.body();
+                        if (moviesResponse != null) {
+                            List<Movie> movies = moviesResponse.getMovies();
+                            if (movies != null)
+                                _loadingMoviesObservable.postValue(new Resource<>(SUCCESS, movies, null));
+                            else
+                                _loadingMoviesObservable.postValue(new Resource<>(ERROR, null, null));
+                        } else
+                            _loadingMoviesObservable.postValue(new Resource<>(ERROR, null, null));
+                    }
 
-        @Override
-        protected List<Movie> doInBackground(String... params) {
-            if (params == null) return null;
-
-            URL moviesRequestUrl = NetworkUtils.buildTMDBUrl(params[0]);
-
-            List<Movie> movieDataJson = new ArrayList<>();
-            try {
-                String jsonMoviesResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
-                movieDataJson = MovieParser.getMoviesFromJson(jsonMoviesResponse);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return movieDataJson;
-        }
-
-        @Override
-        protected void onPostExecute(List<Movie> movies) {
-            if (movies != null)
-                _loadingMoviesObservable.postValue(new Resource<>(SUCCESS, movies, null));
-            else _loadingMoviesObservable.postValue(new Resource<>(ERROR, null, null));
-        }
+                    @Override
+                    public void onFailure(@NonNull Call<Movies> call, Throwable t) {
+                        _loadingMoviesObservable.postValue(new Resource<>(ERROR, null, null));
+                    }
+                });
     }
 }
