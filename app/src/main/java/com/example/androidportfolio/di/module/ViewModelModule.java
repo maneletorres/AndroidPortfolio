@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.androidportfolio.di.ViewModelFactory;
 import com.example.androidportfolio.di.ViewModelKey;
+import com.example.androidportfolio.ui.githubsearch.viewmodel.GitHubSearchViewModel;
 import com.example.androidportfolio.ui.movies.viewmodel.MovieDetailViewModel;
 import com.example.androidportfolio.ui.movies.viewmodel.MoviesViewModel;
 import com.example.androidportfolio.ui.sunshine.viewmodel.SunshineViewModel;
@@ -30,6 +31,11 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MovieDetailViewModel.class)
     abstract ViewModel bindMovieDetailViewModel(MovieDetailViewModel movieDetailViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GitHubSearchViewModel.class)
+    abstract ViewModel bindGitHubSearchViewModel(GitHubSearchViewModel gitHubSearchViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ViewModelFactory factory);

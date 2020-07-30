@@ -13,10 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.androidportfolio.R;
+import com.example.androidportfolio.base.BaseApplication;
 import com.example.androidportfolio.databinding.FragmentGithubSearchBinding;
+import com.example.androidportfolio.di.ViewModelFactory;
 import com.example.androidportfolio.ui.githubsearch.viewmodel.GitHubSearchViewModel;
+import com.example.androidportfolio.ui.movies.viewmodel.MovieDetailViewModel;
+
+import javax.inject.Inject;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -24,18 +30,22 @@ import static android.view.View.VISIBLE;
 public class GitHubSearchFragment extends Fragment {
 
     // Variables:
+    @Inject
+    ViewModelFactory viewModelFactory;
     private GitHubSearchViewModel mViewModel;
     private FragmentGithubSearchBinding mBinding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Dependency injection (DI) with Dagger:
+        ((BaseApplication) requireActivity().getApplication()).getAppComponent().inject(this);
+
         // ViewModel:
-        mViewModel = new ViewModelProvider(requireActivity()).get(GitHubSearchViewModel.class);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(GitHubSearchViewModel.class);
 
         // DataBinding:
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_github_search, container, false);
-        mBinding.setViewModel(mViewModel);
 
         setupToolbar();
         setupObservers();

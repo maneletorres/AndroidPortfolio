@@ -1,5 +1,6 @@
 package com.example.androidportfolio.di.module;
 
+import com.example.androidportfolio.data.rest.remote.GitHubRetrofitService;
 import com.example.androidportfolio.data.rest.remote.MovieRetrofitService;
 import com.example.androidportfolio.data.rest.remote.WeatherRetrofitService;
 import com.example.androidportfolio.utilities.Constants;
@@ -47,5 +48,15 @@ public abstract class NetworkModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
                 .create(MovieRetrofitService.class);
+    }
+
+    @Provides
+    static GitHubRetrofitService provideGitHubRetrofitService() {
+        return new Retrofit.Builder()
+                .baseUrl(Constants.GITHUB_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+                .create(GitHubRetrofitService.class);
     }
 }
