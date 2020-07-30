@@ -7,7 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface SunshineRetrofitService {
+public interface WeatherRetrofitService {
     @GET("staticweather")
     Call<JsonElement> getWeather(@Query(Constants.QUERY_PARAM) String query,
                                  @Query(Constants.FORMAT_PARAM) String mode,
