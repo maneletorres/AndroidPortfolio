@@ -15,32 +15,42 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.androidportfolio.R;
+import com.example.androidportfolio.base.BaseApplication;
 import com.example.androidportfolio.databinding.FragmentSunshineBinding;
+import com.example.androidportfolio.di.ViewModelFactory;
 import com.example.androidportfolio.ui.sunshine.adapter.ForecastAdapter;
 import com.example.androidportfolio.ui.sunshine.viewmodel.SunshineViewModel;
+
+import javax.inject.Inject;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class SunshineFragment extends Fragment implements ForecastAdapter.ForecastAdapterOnClickHandler {
 
+    @Inject
+    ViewModelFactory viewModelFactory;
     private SunshineViewModel mViewModel;
     private FragmentSunshineBinding mBinding;
     private ForecastAdapter mForecastAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // ViewModel:
-        mViewModel = new ViewModelProvider(requireActivity()).get(SunshineViewModel.class);
-
         // DataBinding:
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sunshine, container, false);
-        mBinding.setViewModel(mViewModel);
+        // mBinding.setViewModel(mViewModel);
+
+        // Dependency injection:
+        ((BaseApplication) requireActivity().getApplication()).getAppComponent().inject(this);
+
+        // ViewModel:
+        // mViewModel = new ViewModelProvider(requireActivity()).get(SunshineViewModel.class);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(SunshineViewModel.class);
 
         setupToolbar();
         setupUI();
@@ -81,7 +91,7 @@ public class SunshineFragment extends Fragment implements ForecastAdapter.Foreca
 
         // Navigation legacy:
         Bundle bundle = new Bundle();
-        bundle.putString("weatherForDay", weatherForDay);
+        bundle.putString("weather_for_day", weatherForDay);
 
         Fragment fragment = new SunshineDetailFragment();
         fragment.setArguments(bundle);

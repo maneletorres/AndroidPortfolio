@@ -7,12 +7,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.androidportfolio.data.repository.GitHubSearchService;
+import com.example.androidportfolio.data.rest.repository.GitHubRepository;
 import com.example.androidportfolio.utilities.NetworkUtils;
 import com.example.androidportfolio.utils.Resource;
 import com.google.gson.JsonElement;
 
 import java.net.URL;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,10 +33,18 @@ public class GitHubSearchViewModel extends ViewModel {
         return _loadingGitHubSearchResultObservable;
     }
 
+    // Variables:
+    private final GitHubRepository gitHubRepository;
+
+    @Inject
+    public GitHubSearchViewModel(GitHubRepository gitHubRepository) {
+        this.gitHubRepository = gitHubRepository;
+    }
+
     public void loadGitHubSearch(String githubQuery) {
         _loadingGitHubSearchResultObservable.postValue(new Resource<>(LOADING, null, null));
 
-        new GitHubSearchService().getGitHubSearchApi().getRepositories(githubQuery, "stars")
+        gitHubRepository.getRepositories(githubQuery)
                 .enqueue(new Callback<JsonElement>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {

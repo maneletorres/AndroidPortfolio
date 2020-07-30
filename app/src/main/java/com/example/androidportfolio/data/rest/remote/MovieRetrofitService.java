@@ -1,7 +1,6 @@
-package com.example.androidportfolio.data.repository;
+package com.example.androidportfolio.data.rest.remote;
 
 import com.example.androidportfolio.data.model.Movies;
-import com.example.androidportfolio.data.model.Review;
 import com.example.androidportfolio.data.model.Reviews;
 import com.example.androidportfolio.data.model.Trailers;
 
@@ -10,8 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface TheMovieDatabaseApi {
-
+public interface MovieRetrofitService {
     @GET("movie/{searchCriteria}")
     Call<Movies> getMovies(@Path("searchCriteria") String searchCriteriaQuery,
                            @Query("api_key") String api_key);
