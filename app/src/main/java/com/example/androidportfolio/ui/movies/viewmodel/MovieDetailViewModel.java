@@ -9,11 +9,12 @@ import com.example.androidportfolio.data.model.Review;
 import com.example.androidportfolio.data.model.Reviews;
 import com.example.androidportfolio.data.model.Trailer;
 import com.example.androidportfolio.data.model.Trailers;
-import com.example.androidportfolio.data.repository.TheMovieDatabaseService;
-import com.example.androidportfolio.utilities.Constants;
+import com.example.androidportfolio.data.rest.repository.MovieRepository;
 import com.example.androidportfolio.utils.Resource;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,8 +25,18 @@ import static com.example.androidportfolio.utils.Status.LOADING;
 import static com.example.androidportfolio.utils.Status.SUCCESS;
 
 public class MovieDetailViewModel extends ViewModel {
+
+    // Observables:
     private final MutableLiveData<Resource<List<Trailer>>> _loadingTrailersObservable = new MutableLiveData<>();
     private final MutableLiveData<Resource<List<Review>>> _loadingReviewsObservable = new MutableLiveData<>();
+
+    // Variables:
+    private final MovieRepository movieRepository;
+
+    @Inject
+    public MovieDetailViewModel(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
 
     public LiveData<Resource<List<Trailer>>> loadingTrailersObservable() {
         return _loadingTrailersObservable;
@@ -44,7 +55,8 @@ public class MovieDetailViewModel extends ViewModel {
     public void fetchTrailers(int movieId) {
         _loadingTrailersObservable.postValue(new Resource<>(LOADING, null, null));
 
-        new TheMovieDatabaseService().getApiService().getTrailers(movieId, Constants.API_KEY)
+        // TODO:
+        movieRepository.getTrailers(movieId)
                 .enqueue(new Callback<Trailers>() {
                     @Override
                     public void onResponse(@NonNull Call<Trailers> call, @NonNull Response<Trailers> response) {
@@ -69,7 +81,7 @@ public class MovieDetailViewModel extends ViewModel {
     public void fetchReviews(int movieId) {
         _loadingReviewsObservable.postValue(new Resource<>(LOADING, null, null));
 
-        new TheMovieDatabaseService().getApiService().getReviews(movieId, Constants.API_KEY)
+        movieRepository.getReviews(movieId)
                 .enqueue(new Callback<Reviews>() {
                     @Override
                     public void onResponse(@NonNull Call<Reviews> call, @NonNull Response<Reviews> response) {

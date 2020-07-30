@@ -13,23 +13,29 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.androidportfolio.R;
+import com.example.androidportfolio.base.BaseApplication;
 import com.example.androidportfolio.data.model.Movie;
 import com.example.androidportfolio.data.model.Review;
 import com.example.androidportfolio.data.model.Trailer;
 import com.example.androidportfolio.databinding.FragmentMovieDetailBinding;
+import com.example.androidportfolio.di.ViewModelFactory;
 import com.example.androidportfolio.ui.MainActivity;
 import com.example.androidportfolio.ui.movies.adapter.ReviewAdapter;
 import com.example.androidportfolio.ui.movies.adapter.TrailerAdapter;
 import com.example.androidportfolio.ui.movies.viewmodel.MovieDetailViewModel;
+import com.example.androidportfolio.ui.sunshine.viewmodel.SunshineViewModel;
 import com.example.androidportfolio.utilities.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -37,18 +43,22 @@ import static android.view.View.VISIBLE;
 
 public class MovieDetailFragment extends Fragment implements TrailerAdapter.TrailerAdapterOnClickHandler, ReviewAdapter.ReviewAdapterOnClickHandler {
 
+    @Inject
+    ViewModelFactory viewModelFactory;
     private MovieDetailViewModel mViewModel;
     private FragmentMovieDetailBinding mBinding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Dependency injection (DI) with Dagger:
+        ((BaseApplication) requireActivity().getApplication()).getAppComponent().inject(this);
+
         // ViewModel:
-        mViewModel = new ViewModelProvider(this).get(MovieDetailViewModel.class);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailViewModel.class);
 
         // DataBinding:
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_movie_detail, container, false);
-        mBinding.setViewModel(mViewModel);
 
         Bundle bundle = getArguments();
         if (bundle != null) {

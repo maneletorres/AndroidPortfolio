@@ -7,12 +7,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.androidportfolio.data.model.Movie;
 import com.example.androidportfolio.data.model.Movies;
-import com.example.androidportfolio.data.repository.TheMovieDatabaseService;
-import com.example.androidportfolio.utilities.Constants;
+import com.example.androidportfolio.data.rest.repository.MovieRepository;
 import com.example.androidportfolio.utilities.NetworkUtils;
 import com.example.androidportfolio.utils.Resource;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,8 +24,18 @@ import static com.example.androidportfolio.utils.Status.LOADING;
 import static com.example.androidportfolio.utils.Status.SUCCESS;
 
 public class MoviesViewModel extends ViewModel {
+
+    // Observable:
     private final MutableLiveData<Resource<List<Movie>>> _loadingMoviesObservable = new MutableLiveData<>();
+
+    // Variables:
+    private final MovieRepository movieRepository;
     private String searchCriteria = NetworkUtils.POPULAR_PARAM;
+
+    @Inject
+    public MoviesViewModel(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
+    }
 
     public LiveData<Resource<List<Movie>>> loadingMoviesObservable() {
         return _loadingMoviesObservable;
@@ -42,7 +53,8 @@ public class MoviesViewModel extends ViewModel {
     public void fetchMovies() {
         _loadingMoviesObservable.postValue(new Resource<>(LOADING, null, null));
 
-        new TheMovieDatabaseService().getApiService().getMovies(searchCriteria, Constants.API_KEY)
+        // TODO:
+        movieRepository.getMovies(searchCriteria)
                 .enqueue(new Callback<Movies>() {
                     @Override
                     public void onResponse(@NonNull Call<Movies> call, @NonNull Response<Movies> response) {
@@ -58,7 +70,7 @@ public class MoviesViewModel extends ViewModel {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<Movies> call, Throwable t) {
+                    public void onFailure(@NonNull Call<Movies> call, @NonNull Throwable t) {
                         _loadingMoviesObservable.postValue(new Resource<>(ERROR, null, null));
                     }
                 });

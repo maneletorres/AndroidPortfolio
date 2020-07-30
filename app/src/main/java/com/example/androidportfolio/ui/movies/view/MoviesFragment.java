@@ -12,18 +12,22 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.androidportfolio.R;
+import com.example.androidportfolio.base.BaseApplication;
 import com.example.androidportfolio.data.model.Movie;
 import com.example.androidportfolio.databinding.FragmentMoviesBinding;
+import com.example.androidportfolio.di.ViewModelFactory;
 import com.example.androidportfolio.ui.movies.adapter.MovieAdapter;
 import com.example.androidportfolio.ui.movies.viewmodel.MoviesViewModel;
 import com.example.androidportfolio.utilities.NetworkUtils;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -31,6 +35,8 @@ import static android.view.View.VISIBLE;
 public class MoviesFragment extends Fragment implements MovieAdapter.MovieAdapterOnClickHandler {
 
     private static final int SPAN_COUNT = 2;
+    @Inject
+    ViewModelFactory viewModelFactory;
     private MoviesViewModel mViewModel;
     private FragmentMoviesBinding mBinding;
     private MovieAdapter mMovieAdapter;
@@ -39,12 +45,14 @@ public class MoviesFragment extends Fragment implements MovieAdapter.MovieAdapte
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ViewModel:
-        mViewModel = new ViewModelProvider(requireActivity()).get(MoviesViewModel.class);
+        // Dependency injection (DI) - Dagger:
+        ((BaseApplication) requireActivity().getApplication()).getAppComponent().inject(this);
 
         // DataBinding:
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_movies, container, false);
-        mBinding.setViewModel(mViewModel);
+
+        // ViewModel:
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel.class);
 
         setupToolbar();
         setupUI();

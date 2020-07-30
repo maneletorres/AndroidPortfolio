@@ -1,6 +1,7 @@
 package com.example.androidportfolio.di.module;
 
-import com.example.androidportfolio.data.rest.remote.SunshineRetrofitService;
+import com.example.androidportfolio.data.rest.remote.MovieRetrofitService;
+import com.example.androidportfolio.data.rest.remote.WeatherRetrofitService;
 import com.example.androidportfolio.utilities.Constants;
 
 import dagger.Module;
@@ -29,12 +30,22 @@ public abstract class NetworkModule {
     }*/
 
     @Provides
-    static SunshineRetrofitService provideSunshineRetrofitService() {
+    static WeatherRetrofitService provideSunshineRetrofitService() {
         return new Retrofit.Builder()
                 .baseUrl(Constants.FORECAST_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
-                .create(SunshineRetrofitService.class);
+                .create(WeatherRetrofitService.class);
+    }
+
+    @Provides
+    static MovieRetrofitService provideMovieRetrofitService() {
+        return new Retrofit.Builder()
+                .baseUrl(Constants.TMDB_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+                .create(MovieRetrofitService.class);
     }
 }
