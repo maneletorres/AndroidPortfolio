@@ -1,17 +1,22 @@
 package com.example.androidportfolio.ui.githubsearch.viewmodel;
 
-import android.os.AsyncTask;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.androidportfolio.data.repository.GitHubSearchService;
 import com.example.androidportfolio.utilities.NetworkUtils;
 import com.example.androidportfolio.utils.Resource;
+import com.google.gson.JsonElement;
 
-import java.io.IOException;
 import java.net.URL;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.androidportfolio.utils.Status.ERROR;
 import static com.example.androidportfolio.utils.Status.LOADING;
@@ -27,36 +32,26 @@ public class GitHubSearchViewModel extends ViewModel {
     }
 
     public void loadGitHubSearch(String githubQuery) {
-        new GitHubSearchTask().execute(githubQuery);
-    }
+        _loadingGitHubSearchResultObservable.postValue(new Resource<>(LOADING, null, null));
 
-    private class GitHubSearchTask extends AsyncTask<String, Void, Pair<String, String>> {
+        new GitHubSearchService().getGitHubSearchApi().getRepositories(githubQuery, "stars")
+                .enqueue(new Callback<JsonElement>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
+                        JsonElement gitHubResponse = response.body();
+                        if (gitHubResponse != null) {
+                            URL searchUrl = NetworkUtils.buildGithubUrl(githubQuery);
+                            Pair<String, String> stringPair = new Pair<>(searchUrl.toString(), gitHubResponse.toString());
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            _loadingGitHubSearchResultObservable.postValue(new Resource<>(LOADING, null, null));
-        }
+                            _loadingGitHubSearchResultObservable.postValue(new Resource<>(SUCCESS, stringPair, null));
+                        } else
+                            _loadingGitHubSearchResultObservable.postValue(new Resource<>(ERROR, null, null));
+                    }
 
-        @Override
-        protected Pair<String, String> doInBackground(String... params) {
-            URL searchUrl = NetworkUtils.buildGithubUrl(params[0]);
-            Pair<String, String> stringPair = null;
-            try {
-                String githubSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-                stringPair = new Pair<>(searchUrl.toString(), githubSearchResults);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            return stringPair;
-        }
-
-        @Override
-        protected void onPostExecute(Pair<String, String> gitHubSearchResult) {
-            if (gitHubSearchResult != null)
-                _loadingGitHubSearchResultObservable.postValue(new Resource<>(SUCCESS, gitHubSearchResult, null));
-            else _loadingGitHubSearchResultObservable.postValue(new Resource<>(ERROR, null, null));
-        }
+                    @Override
+                    public void onFailure(@NonNull Call<JsonElement> call, @NonNull Throwable t) {
+                        _loadingGitHubSearchResultObservable.postValue(new Resource<>(ERROR, null, null));
+                    }
+                });
     }
 }
