@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 
 import javax.inject.Inject;
 
+import io.reactivex.Single;
 import retrofit2.Call;
 
 public class GitHubRepository {
@@ -15,7 +16,7 @@ public class GitHubRepository {
         this.gitHubRemoteDataSource = gitHubRemoteDataSource;
     }
 
-    public Call<JsonElement> getRepositories(String gitHubQuery) {
+    public Single<JsonElement> getRepositories(String gitHubQuery) {
         return gitHubRemoteDataSource.getRepositories(gitHubQuery);
     }
 }

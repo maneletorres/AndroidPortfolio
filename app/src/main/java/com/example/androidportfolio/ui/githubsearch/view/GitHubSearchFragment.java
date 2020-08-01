@@ -26,15 +26,13 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class GitHubSearchFragment extends Fragment {
-
     @Inject
     ViewModelFactory viewModelFactory;
     private GitHubSearchViewModel mViewModel;
     private FragmentGithubSearchBinding mBinding;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Dependency injection (DI) with Dagger:
         ((BaseApplication) requireActivity().getApplication()).getAppComponent().inject(this);
 
