@@ -26,7 +26,6 @@ import static android.view.View.VISIBLE;
 
 public class FavoriteToysFragment extends Fragment implements ToyAdapter.ToyAdapterOnClickHandler {
 
-    // Variables:
     private FavoriteToysViewModel mViewModel;
     private FragmentFavoriteToysBinding mBinding;
     private ToyAdapter mToyAdapter;
@@ -38,7 +37,6 @@ public class FavoriteToysFragment extends Fragment implements ToyAdapter.ToyAdap
 
         // DataBinding:
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorite_toys, container, false);
-        mBinding.setViewModel(mViewModel);
 
         setupToolbar();
         setupUI();
@@ -99,8 +97,6 @@ public class FavoriteToysFragment extends Fragment implements ToyAdapter.ToyAdap
                 case ERROR:
                     showLoadToyErrorMessage();
                     break;
-                default:
-                    // TODO
             }
         });
     }
