@@ -6,11 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.androidportfolio.data.model.Toy;
 import com.example.androidportfolio.utilities.ToyBox;
 import com.example.androidportfolio.utils.Resource;
-
-import java.util.List;
 
 import static com.example.androidportfolio.utils.Status.ERROR;
 import static com.example.androidportfolio.utils.Status.LOADING;
@@ -18,17 +15,17 @@ import static com.example.androidportfolio.utils.Status.SUCCESS;
 
 public class FavoriteToysViewModel extends ViewModel {
 
-    // Observables:
     private final MutableLiveData<Resource<String[]>> _loadingToysObservable = new MutableLiveData<>();
+
     public LiveData<Resource<String[]>> loadingToysObservable() {
         return _loadingToysObservable;
     }
 
     public void start() {
-        new FetchToyTask().execute();
+        new FetchToysTask().execute();
     }
 
-    public class FetchToyTask extends AsyncTask<Void, Void, String[]> {
+    public class FetchToysTask extends AsyncTask<Void, Void, String[]> {
 
         @Override
         protected void onPreExecute() {

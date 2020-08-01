@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,8 +27,7 @@ import com.example.androidportfolio.ui.MainActivity;
 import com.example.androidportfolio.ui.movies.adapter.ReviewAdapter;
 import com.example.androidportfolio.ui.movies.adapter.TrailerAdapter;
 import com.example.androidportfolio.ui.movies.viewmodel.MovieDetailViewModel;
-import com.example.androidportfolio.ui.sunshine.viewmodel.SunshineViewModel;
-import com.example.androidportfolio.utilities.NetworkUtils;
+import com.example.androidportfolio.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.net.URL;

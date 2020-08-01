@@ -23,7 +23,7 @@ import com.example.androidportfolio.databinding.FragmentMoviesBinding;
 import com.example.androidportfolio.di.ViewModelFactory;
 import com.example.androidportfolio.ui.movies.adapter.MovieAdapter;
 import com.example.androidportfolio.ui.movies.viewmodel.MoviesViewModel;
-import com.example.androidportfolio.utilities.NetworkUtils;
+import com.example.androidportfolio.utils.NetworkUtils;
 
 import java.util.List;
 
@@ -43,8 +43,6 @@ public class MoviesFragment extends Fragment implements MovieAdapter.MovieAdapte
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         // Dependency injection (DI) - Dagger:
         ((BaseApplication) requireActivity().getApplication()).getAppComponent().inject(this);
 

@@ -41,22 +41,20 @@ public class SunshineFragment extends Fragment implements ForecastAdapter.Foreca
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // DataBinding:
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sunshine, container, false);
-        // mBinding.setViewModel(mViewModel);
-
-        // Dependency injection:
+        // Dependency injection (DI) with Dagger:
         ((BaseApplication) requireActivity().getApplication()).getAppComponent().inject(this);
 
+        // DataBinding:
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sunshine, container, false);
+
         // ViewModel:
-        // mViewModel = new ViewModelProvider(requireActivity()).get(SunshineViewModel.class);
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(SunshineViewModel.class);
 
         setupToolbar();
         setupUI();
         setupObservers();
 
-        mViewModel.loadWeatherData(getContext());
+        mViewModel.fetchForecasts(getContext());
 
         return mBinding.getRoot();
     }
@@ -72,7 +70,7 @@ public class SunshineFragment extends Fragment implements ForecastAdapter.Foreca
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             mForecastAdapter.setWeatherData(null);
-            mViewModel.loadWeatherData(getContext());
+            mViewModel.fetchForecasts(getContext());
             return true;
         } else if (id == R.id.action_map) {
             openLocationMap();
@@ -91,7 +89,7 @@ public class SunshineFragment extends Fragment implements ForecastAdapter.Foreca
 
         // Navigation legacy:
         Bundle bundle = new Bundle();
-        bundle.putString("weather_for_day", weatherForDay);
+        bundle.putString(getString(R.string.clicked_forecast_key), weatherForDay);
 
         Fragment fragment = new SunshineDetailFragment();
         fragment.setArguments(bundle);

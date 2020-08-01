@@ -15,11 +15,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ShareCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.androidportfolio.R;
 import com.example.androidportfolio.databinding.FragmentSunshineDetailBinding;
-import com.example.androidportfolio.ui.sunshine.viewmodel.SunshineDetailViewModel;
 
 public class SunshineDetailFragment extends Fragment {
 
@@ -30,20 +28,14 @@ public class SunshineDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // ViewModel:
-        SunshineDetailViewModel viewModel = new ViewModelProvider(this).get(SunshineDetailViewModel.class);
-
         // DataBinding:
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_sunshine_detail, container, false);
-        mBinding.setViewModel(viewModel);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            String weather = bundle.getString("weather_for_day");
+            String weather = bundle.getString(getString(R.string.clicked_forecast_key));
             setupUI(weather);
         } else closeOnError();
-
-        setupObservers();
 
         return mBinding.getRoot();
     }
@@ -66,10 +58,6 @@ public class SunshineDetailFragment extends Fragment {
     private void setupUI(String weather) {
         mForecast = weather;
         mBinding.tvDisplayWeather.setText(mForecast);
-    }
-
-    private void setupObservers() {
-        // TODO
     }
 
     private void closeOnError() {
