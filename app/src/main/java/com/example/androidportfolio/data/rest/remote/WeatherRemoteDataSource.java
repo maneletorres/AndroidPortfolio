@@ -1,11 +1,11 @@
 package com.example.androidportfolio.data.rest.remote;
 
-import com.example.androidportfolio.utilities.Constants;
+import com.example.androidportfolio.utils.Constants;
 import com.google.gson.JsonElement;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
+import io.reactivex.Single;
 
 public class WeatherRemoteDataSource {
     private final WeatherRetrofitService weatherRetrofitService;
@@ -15,7 +15,7 @@ public class WeatherRemoteDataSource {
         this.weatherRetrofitService = weatherRetrofitService;
     }
 
-    public Call<JsonElement> getWeather(String preferredWeatherLocation) {
+    public Single<JsonElement> getWeather(String preferredWeatherLocation) {
         return weatherRetrofitService.getWeather(preferredWeatherLocation, Constants.format, Constants.units, Integer.toString(Constants.numDays));
     }
 }

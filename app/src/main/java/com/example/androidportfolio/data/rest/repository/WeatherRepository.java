@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
+import io.reactivex.Single;
 
 public class WeatherRepository {
     private WeatherRemoteDataSource weatherRemoteDataSource;
@@ -15,7 +15,7 @@ public class WeatherRepository {
         this.weatherRemoteDataSource = weatherRemoteDataSource;
     }
 
-    public Call<JsonElement> getForecast(String preferredWeatherLocation) {
+    public Single<JsonElement> getForecast(String preferredWeatherLocation) {
         return weatherRemoteDataSource.getWeather(preferredWeatherLocation);
     }
 }
