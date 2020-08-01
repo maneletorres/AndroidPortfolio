@@ -1,6 +1,5 @@
 package com.example.androidportfolio.ui.movies.viewmodel;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -16,22 +15,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.example.androidportfolio.utils.Status.ERROR;
 import static com.example.androidportfolio.utils.Status.LOADING;
 import static com.example.androidportfolio.utils.Status.SUCCESS;
 
 public class MovieDetailViewModel extends ViewModel {
-
-    // Observables:
     private final MutableLiveData<Resource<List<Trailer>>> _loadingTrailersObservable = new MutableLiveData<>();
     private final MutableLiveData<Resource<List<Review>>> _loadingReviewsObservable = new MutableLiveData<>();
-
-    // Variables:
     private final MovieRepository movieRepository;
+    private CompositeDisposable disposable = new CompositeDisposable();
 
     @Inject
     public MovieDetailViewModel(MovieRepository movieRepository) {
@@ -55,51 +52,46 @@ public class MovieDetailViewModel extends ViewModel {
     public void fetchTrailers(int movieId) {
         _loadingTrailersObservable.postValue(new Resource<>(LOADING, null, null));
 
-        // TODO:
-        movieRepository.getTrailers(movieId)
-                .enqueue(new Callback<Trailers>() {
+        disposable.add(movieRepository.getTrailers(movieId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<Trailers>() {
                     @Override
-                    public void onResponse(@NonNull Call<Trailers> call, @NonNull Response<Trailers> response) {
-                        Trailers trailersResponse = response.body();
-                        if (trailersResponse != null) {
-                            List<Trailer> trailers = trailersResponse.getTrailers();
-                            if (trailers != null)
-                                _loadingTrailersObservable.postValue(new Resource<>(SUCCESS, trailers, null));
-                            else
-                                _loadingTrailersObservable.postValue(new Resource<>(ERROR, null, null));
-                        } else
+                    public void onSuccess(Trailers trailers) {
+                        List<Trailer> trailerList = trailers.getTrailers();
+                        if (trailerList != null)
+                            _loadingTrailersObservable.postValue(new Resource<>(SUCCESS, trailerList, null));
+                        else
                             _loadingTrailersObservable.postValue(new Resource<>(ERROR, null, null));
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<Trailers> call, @NonNull Throwable t) {
+                    public void onError(Throwable e) {
                         _loadingTrailersObservable.postValue(new Resource<>(ERROR, null, null));
                     }
-                });
+                }));
     }
 
     public void fetchReviews(int movieId) {
         _loadingReviewsObservable.postValue(new Resource<>(LOADING, null, null));
 
-        movieRepository.getReviews(movieId)
-                .enqueue(new Callback<Reviews>() {
+        disposable.add(movieRepository.getReviews(movieId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<Reviews>() {
                     @Override
-                    public void onResponse(@NonNull Call<Reviews> call, @NonNull Response<Reviews> response) {
-                        Reviews reviewsResponse = response.body();
-                        if (reviewsResponse != null) {
-                            List<Review> reviews = reviewsResponse.getReviews();
-                            if (reviews != null)
-                                _loadingReviewsObservable.postValue(new Resource<>(SUCCESS, reviews, null));
-                            else
-                                _loadingReviewsObservable.postValue(new Resource<>(ERROR, null, null));
-                        } else
+                    public void onSuccess(Reviews trailers) {
+                        List<Review> reviewList = trailers.getReviews();
+                        if (reviewList != null)
+                            _loadingReviewsObservable.postValue(new Resource<>(SUCCESS, reviewList, null));
+                        else
                             _loadingReviewsObservable.postValue(new Resource<>(ERROR, null, null));
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<Reviews> call, @NonNull Throwable t) {
+                    public void onError(Throwable e) {
                         _loadingReviewsObservable.postValue(new Resource<>(ERROR, null, null));
                     }
-                });
+                }));
     }
 }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidportfolio.R;
 import com.example.androidportfolio.data.model.Movie;
-import com.example.androidportfolio.utilities.NetworkUtils;
+import com.example.androidportfolio.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

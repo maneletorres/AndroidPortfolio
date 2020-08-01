@@ -7,7 +7,7 @@ import com.example.androidportfolio.data.rest.remote.MovieRemoteDataSource;
 
 import javax.inject.Inject;
 
-import retrofit2.Call;
+import io.reactivex.Single;
 
 public class MovieRepository {
 
@@ -18,15 +18,15 @@ public class MovieRepository {
         this.movieRemoteDataSource = movieRemoteDataSource;
     }
 
-    public Call<Movies> getMovies(String searchCriteria) {
+    public Single<Movies> getMovies(String searchCriteria) {
         return movieRemoteDataSource.getMovies(searchCriteria);
     }
 
-    public Call<Trailers> getTrailers(int movieId) {
+    public Single<Trailers> getTrailers(int movieId) {
         return movieRemoteDataSource.getTrailers(movieId);
     }
 
-    public Call<Reviews> getReviews(int movieId) {
+    public Single<Reviews> getReviews(int movieId) {
         return movieRemoteDataSource.getReviews(movieId);
     }
 }
