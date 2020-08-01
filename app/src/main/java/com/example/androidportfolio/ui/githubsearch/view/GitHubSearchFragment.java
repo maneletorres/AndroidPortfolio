@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.androidportfolio.R;
@@ -20,7 +19,6 @@ import com.example.androidportfolio.base.BaseApplication;
 import com.example.androidportfolio.databinding.FragmentGithubSearchBinding;
 import com.example.androidportfolio.di.ViewModelFactory;
 import com.example.androidportfolio.ui.githubsearch.viewmodel.GitHubSearchViewModel;
-import com.example.androidportfolio.ui.movies.viewmodel.MovieDetailViewModel;
 
 import javax.inject.Inject;
 
@@ -29,7 +27,6 @@ import static android.view.View.VISIBLE;
 
 public class GitHubSearchFragment extends Fragment {
 
-    // Variables:
     @Inject
     ViewModelFactory viewModelFactory;
     private GitHubSearchViewModel mViewModel;
@@ -84,8 +81,6 @@ public class GitHubSearchFragment extends Fragment {
                 case ERROR:
                     showLoadGithubSearchErrorMessage();
                     break;
-                default:
-                    // TODO
             }
         });
     }

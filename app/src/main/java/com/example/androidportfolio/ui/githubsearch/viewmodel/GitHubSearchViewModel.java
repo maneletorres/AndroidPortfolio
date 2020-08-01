@@ -25,15 +25,7 @@ import static com.example.androidportfolio.utils.Status.LOADING;
 import static com.example.androidportfolio.utils.Status.SUCCESS;
 
 public class GitHubSearchViewModel extends ViewModel {
-
-    // Observables:
     private final MutableLiveData<Resource<Pair<String, String>>> _loadingGitHubSearchResultObservable = new MutableLiveData<>();
-
-    public LiveData<Resource<Pair<String, String>>> loadingGitHubSearchResultObservable() {
-        return _loadingGitHubSearchResultObservable;
-    }
-
-    // Variables:
     private final GitHubRepository gitHubRepository;
 
     @Inject
@@ -41,16 +33,20 @@ public class GitHubSearchViewModel extends ViewModel {
         this.gitHubRepository = gitHubRepository;
     }
 
-    public void loadGitHubSearch(String githubQuery) {
+    public LiveData<Resource<Pair<String, String>>> loadingGitHubSearchResultObservable() {
+        return _loadingGitHubSearchResultObservable;
+    }
+
+    public void loadGitHubSearch(String gitHubQuery) {
         _loadingGitHubSearchResultObservable.postValue(new Resource<>(LOADING, null, null));
 
-        gitHubRepository.getRepositories(githubQuery)
+        gitHubRepository.getRepositories(gitHubQuery)
                 .enqueue(new Callback<JsonElement>() {
                     @Override
                     public void onResponse(@NonNull Call<JsonElement> call, @NonNull Response<JsonElement> response) {
                         JsonElement gitHubResponse = response.body();
                         if (gitHubResponse != null) {
-                            URL searchUrl = NetworkUtils.buildGithubUrl(githubQuery);
+                            URL searchUrl = NetworkUtils.buildGithubUrl(gitHubQuery);
                             Pair<String, String> stringPair = new Pair<>(searchUrl.toString(), gitHubResponse.toString());
 
                             _loadingGitHubSearchResultObservable.postValue(new Resource<>(SUCCESS, stringPair, null));
